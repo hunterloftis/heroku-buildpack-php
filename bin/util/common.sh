@@ -1,32 +1,30 @@
 error() {
-  echo
-  echo " !     ERROR: $*" | indent no_first_line_indent
-  echo
+  echo "" || true
+  echo -e "\033[91m\033[1m\033[40m=!= $*\033[0m" || true
   exit 1
 }
 
 warning() {
-  echo
-  echo " !     WARNING: $*" | indent no_first_line_indent
-  echo
+  echo "" || true
+  echo -e "\033[93m\033[1m\033[40m=!= $*\033[0m" || true
 }
 
 warning_inline() {
-  echo " !     WARNING: $*" | indent no_first_line_indent
+  echo "" || true
+  echo -e "\033[93m\033[1m\033[40m=!= $*\033[0m" || true
 }
 
 status() {
-  echo "-----> $*"
+  echo "" || true
+  echo -e "\033[96m\033[1m\033[40m=== $*\033[0m" || true
 }
 
 notice() {
-  echo
-  echo "NOTICE: $*" | indent
-  echo
+  echo -e "\033[93m\033[1m\033[40mNOTICE:\033[0m$*" || true
 }
 
 notice_inline() {
-  echo "NOTICE: $*" | indent
+  echo -e "\033[93m\033[1m\033[40mNOTICE:\033[0m$*" || true
 }
 
 # sed -l basically makes sed replace and buffer through stdin to stdout
@@ -34,7 +32,7 @@ notice_inline() {
 # e.g. npm install | indent
 indent() {
   # if an arg is given it's a flag indicating we shouldn't indent the first line, so use :+ to tell SED accordingly if that parameter is set, otherwise null string for no range selector prefix (it selects from line 2 onwards and then every 1st line, meaning all lines)
-  local c="${1:+"2,999"} s/^/       /"
+  local c="${1:+"2,999"} s/^//"
   case $(uname) in
     Darwin) sed -l "$c";; # mac/bsd sed: -l buffers on line boundaries
     *)      sed -u "$c";; # unix/gnu sed: -u unbuffered (arbitrary) chunks of data
